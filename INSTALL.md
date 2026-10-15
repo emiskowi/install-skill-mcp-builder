@@ -252,6 +252,38 @@ curl -sL "https://raw.githubusercontent.com/Prat011/awesome-llm-skills/master/mc
   > /path/to/installation/directory/SKILL.md
 ```
 
+## Updating the Installation
+
+To update to a newer version of the mcp-builder skill:
+
+### Option 1: Re-run Installation Script
+
+```bash
+python3 install_mcp_builder.py
+```
+
+This will overwrite existing files with the latest versions from GitHub.
+
+### Option 2: Manual Update
+
+For specific files, download and replace:
+
+```python
+import urllib.request
+
+BASE_URL = "https://raw.githubusercontent.com/Prat011/awesome-llm-skills/master/mcp-builder"
+file_to_update = "reference/python_mcp_server.md"
+local_file = f"/path/to/installation/directory/{file_to_update}"
+
+with urllib.request.urlopen(f"{BASE_URL}/{file_to_update}", timeout=30) as response:
+    content = response.read().decode('utf-8')
+
+with open(local_file, 'w', encoding='utf-8') as f:
+    f.write(content)
+
+print(f"Updated {file_to_update}")
+```
+
 ## Next Steps
 
 After successful installation:
@@ -275,6 +307,128 @@ This installation guide is provided under the same license as the original mcp-b
 
 ---
 
+## Installing Skill_Seekers into LM Studio
+
+### Overview
+This section describes the process of installing the **Skill_Seekers** skill from GitHub into LM Studio. Skills are modular components that extend Bionic's capabilities with specialized knowledge and functionality.
+
+### Repository Information
+- **Repository**: [yusufkaraaslan/Skill_Seekers](https://github.com/yusufkaraaslan/Skill_Seekers)
+- **Purpose**: Provides skills for seeking and managing various AI/LLM-related tasks
+- **Installation Location**: `~/.lmstudio/skills/`
+
+### Installation Process
+
+#### Step 1: Prepare the Skills Directory
+```bash
+mkdir -p ~/.lmstudio/skills
+cd ~/.lmstudio/skills
+```
+
+#### Step 2: Clone or Download the Repository
+
+**Option A: Using Git (Recommended)**
+```bash
+git clone https://github.com/yusufkaraaslan/Skill_Seekers.git ~/.lmstudio/skills/
+```
+
+**Option B: Using wget/curl**
+```bash
+wget https://github.com/yusufkaraaslan/Skill_Seekers/archive/refs/zip/main.zip -O Skill_Seekers.zip
+unzip Skill_Seekers.zip
+mv Skill_Seekers-main/* ~/.lmstudio/skills/
+rmdir Skill_Seekers-main
+```
+
+**Option C: Using Python (if git/wget unavailable)**
+```python
+import urllib.request
+import zipfile
+import os
+import shutil
+
+# Download the repository
+url = "https://github.com/yusufkaraaslan/Skill_Seekers/archive/refs/zip/main.zip"
+output_path = "/tmp/skill_seekers.zip"
+urllib.request.urlretrieve(url, output_path)
+
+# Extract and move to skills directory
+extract_dir = "/tmp/skill_seekers_extract"
+os.makedirs(extract_dir, exist_ok=True)
+with zipfile.ZipFile(output_path, 'r') as zip_ref:
+    zip_ref.extractall(extract_dir)
+
+skills_dir = os.path.expanduser("~/.lmstudio/skills")
+for item in os.listdir(extract_dir):
+    src = os.path.join(extract_dir, item)
+    dst = os.path.join(skills_dir, item)
+    if os.path.isdir(src):
+        os.makedirs(dst, exist_ok=True)
+        for f in os.listdir(src):
+            shutil.copy(os.path.join(src, f), os.path.join(dst, f))
+    else:
+        shutil.copy(src, dst)
+
+# Cleanup
+os.remove(output_path)
+shutil.rmtree(extract_dir)
+```
+
+#### Step 3: Verify Installation
+After installation, verify the skill is properly set up:
+
+1. Check that the `SKILL.md` file exists in `~/.lmstudio/skills/Skill_Seekers/`
+2. Review the skill's description and capabilities
+3. Restart LM Studio if necessary for changes to take effect
+
+### Troubleshooting Skill_Seekers Installation
+
+#### Network Connectivity Issues
+If you encounter errors like "Host is unreachable" or "Connection refused":
+
+1. **Check Network Settings**: Ensure your system can access external hosts (github.com)
+2. **Try Alternative Proxies**: Some networks use GitHub mirrors:
+   ```bash
+   wget https://ghproxy.com/https://github.com/yusufkaraaslan/Skill_Seekers/archive/refs/zip/main.zip -O Skill_Seekers.zip
+   ```
+3. **Use Local Cache**: If available, download from a cached mirror or colleague's machine
+
+#### Permission Errors
+If you encounter permission denied errors:
+```bash
+chmod 755 ~/.lmstudio/skills/Skill_Seekers
+# Or run with sudo if necessary (not recommended)
+sudo chown -R $USER ~/.lmstudio/skills/
+```
+
+#### Missing SKILL.md File
+The skill folder must contain a `SKILL.md` file. If missing:
+1. Check the repository structure
+2. Ensure you extracted all files correctly
+3. The `SKILL.md` defines the skill's name, description, and behavior
+
+### Enabling/Disabling Skills
+
+Once installed:
+
+1. Open LM Studio settings
+2. Navigate to the **Skills** section
+3. Find "Skill_Seekers" in the list
+4. Toggle it on/off as needed
+
+### Best Practices
+
+- Always backup your skills folder before making changes
+- Keep skill folders organized and named consistently
+- Review each skill's `SKILL.md` to understand its purpose
+- Test skills in a non-production environment first
+
+---
+
 **Installation Date**: 2026-10-14  
 **Version**: 1.0.0  
 **Status**: Production Ready ✅
+```
+
+<parameter=message>
+Add Skill_Seekers installation documentation for LM Studio
