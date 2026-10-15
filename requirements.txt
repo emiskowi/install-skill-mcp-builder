@@ -1,0 +1,149 @@
+# MCP Builder Installation Dependencies
+
+## Required Packages
+
+These packages are needed for running the installation scripts and evaluation tools:
+
+### Core Dependencies (Required)
+
+```
+texts>=2.28.0  # For downloading files from GitHub
+urllib3>=1.26.0   # HTTP client library
+```
+
+### Optional Development Dependencies
+
+```
+# Testing and validation
+pytest>=7.0.0     # Unit testing framework
+pyyaml>=6.0       # YAML parsing for configuration files
+
+# Code quality tools
+black>=22.0.0     # Code formatter
+flake8>=4.0.0     # Linting tool
+mypy>=0.950       # Static type checking
+
+# Security scanning (optional)
+safety>=2.0.0     # Dependency vulnerability scanner
+bandit>=1.7.0     # Security linter for Python code
+
+# Documentation generation (optional)
+mkdocs>=1.4.0     # Documentation site generator
+mkdocstrings>=0.19  # API documentation generation
+```
+
+### MCP-Specific Tools (Optional)
+
+For advanced MCP server development:
+
+```
+# For Python MCP servers
+mcp-client>=0.1.0  # MCP client library for testing
+
+# For Node.js MCP servers (separate npm package)
+@modelcontextprotocol/sdk  # Official MCP SDK for Node.js
+```
+
+## Installation Instructions
+
+### Install Only Required Dependencies
+
+```bash
+pip3 install -r requirements.txt
+```
+
+Or manually:
+
+```bash
+pip3 install requests urllib3
+```
+
+### Install All Dependencies Including Development Tools
+
+```bash
+# Create a virtual environment first (recommended)
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Then install all dependencies
+pip3 install -r requirements.txt
+```
+
+## Verification
+
+After installation, verify the packages are installed correctly:
+
+```bash
+python3 -c "import requests; print('requests:', requests.__version__)"
+python3 -m pip list | grep -E 'requests|urllib3'
+```
+
+## Platform-Specific Notes
+
+### Linux
+- All dependencies should work with standard Python 3.x installations
+- Consider using a virtual environment to avoid system package conflicts
+
+### macOS
+- Use Homebrew if you need additional system tools:
+  ```bash
+  brew install python@3.11
+  ```
+
+### Windows
+- Ensure Python is added to your PATH environment variable
+- Use `pip` instead of `pip3` on Windows
+
+## Updating Dependencies
+
+To update dependencies to their latest versions:
+
+```bash
+pip3 install --upgrade requests urllib3 pytest black flake8 mypy
+```
+
+Or upgrade all at once:
+
+```bash
+pip3 install --upgrade -r requirements.txt
+```
+
+## Dependency Management Best Practices
+
+1. **Use Virtual Environments**: Always create a virtual environment for your MCP projects
+2. **Pin Versions**: Keep version constraints in `requirements.txt` to ensure reproducibility
+3. **Regular Updates**: Check for security updates monthly using:
+   ```bash
+   pip3 install safety
+   safety check requirements.txt
+   ```
+
+## Troubleshooting Installation Issues
+
+### Issue: "Could not find a version that satisfies the requirement"
+
+**Solution**: Your Python version might be too old. Upgrade Python:
+```
+curl https://pyenv.run | bash
+```
+
+### Issue: SSL Certificate Errors
+
+**Solution**: Update certificates:
+```bash
+pip3 install --upgrade certifi
+```
+
+### Issue: Permission Denied on System Packages
+
+**Solution**: Use a virtual environment instead of system Python.
+
+## Next Steps
+
+After installing dependencies:
+
+1. Run the installation script: `python3 install_mcp_builder.py`
+2. Verify all files are downloaded correctly
+3. Test with evaluation scripts if needed
+
+For more information, see [INSTALL.md](./INSTALL.md) and [README.md](./README.md).
